@@ -2,7 +2,10 @@
 
 void kmain(void)
 {
+    int x = 7;
+    int y = 5;
+
     vga_init();
-    vga_writestring("Hello world, this is my apotheosis.\n");
-    vga_writestring("This is a second line.\n");
+    kprintf("x = %d, &x = 0x%x\n", x, &x);
+    kprintf("y = %d, &y = 0x%x", y, &y);
 }

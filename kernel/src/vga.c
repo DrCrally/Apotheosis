@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stddef.h>
+#include <stdarg.h>
 
 #include "text_cursor.h"
 
@@ -75,6 +76,63 @@ void vga_writestring(const char* str)
 {
     for (size_t i = 0; str[i]; ++i)
         vga_putchar(str[i]);
+
+    update_cursor(vga_col, vga_row);
+}
+
+
+void print_int(int number, int base)
+{
+    static char digit_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+    char buf[32];
+    int i = 0;
+    for (i = 0; number; number /= base)
+        buf[i++] = digit_array[number % base];
+
+    while (i--)
+        vga_putchar(buf[i]);
+}
+
+void handle_specifier(char spec, va_list* ap)
+{
+    switch (spec)
+    {
+        case 'b': { print_int(va_arg(*ap, int), 2); } break;
+        case 'o': { print_int(va_arg(*ap, int), 8); } break;
+        case 'd': { print_int(va_arg(*ap, int), 10); } break;
+        case 'x': { print_int(va_arg(*ap, int), 16); } break;
+        case 's': { vga_writestring(va_arg(*ap, const char*)); } break;
+    }
+}
+
+void kprintf(const char* str, ...)
+{
+    va_list ap;
+    va_start(ap, str);
+
+    for (size_t i = 0; str[i]; ++i)
+    {
+        switch (str[i])
+        {
+            case '%':
+            {
+                handle_specifier(str[++i], &ap);
+            } break;
+
+            case '\\':
+            {
+                vga_putchar(str[++i]);
+            } break;
+
+            default:
+            {
+                vga_putchar(str[i]);
+            } break;
+        }
+    }
+
+    va_end(ap);
 
     update_cursor(vga_col, vga_row);
 }

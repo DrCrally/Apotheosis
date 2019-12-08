@@ -2,6 +2,6 @@
 #define VGA_H
 
 void vga_init(void);
-void vga_writestring(const char* str);
+void kprintf(const char* str, ...);
 
 #endif
