@@ -7,7 +7,7 @@
 outb:
     push eax
     push edx
-    mov     dx, WORD PTR [esp + 12]
+    mov dx, WORD PTR [esp + 12]
     mov al, BYTE PTR [esp + 16]
     out dx, al
     pop edx

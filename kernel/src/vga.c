@@ -42,12 +42,7 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
     return ((uint16_t)uc | ((uint16_t)color << 8u));
 }
 
-void vga_setcolor(uint8_t color)
-{
-    vga_color = color;
-}
-
-void vga_putchar(char c)
+static void vga_putchar(char c)
 {
     switch (c)
     {
@@ -72,18 +67,18 @@ void vga_putchar(char c)
     }
 }
 
-void write_string(const char* str)
+static void write_string(const char* str)
 {
     for (size_t i = 0; str[i]; ++i)
         vga_putchar(str[i]);
 }
 
 
-void write_int(int number, int base)
+static void write_int(int number, int base)
 {
     static char digit_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    // TODO: Make sure base is <= 16
+    // TODO: Make sure base is <= 16, need asserts
 
     char buf[32];
     int i = 0;
@@ -94,7 +89,7 @@ void write_int(int number, int base)
         vga_putchar(buf[i]);
 }
 
-void handle_specifier(char spec, va_list* ap)
+static void handle_specifier(char spec, va_list* ap)
 {
     switch (spec)
     {
