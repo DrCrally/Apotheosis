@@ -74,7 +74,22 @@ static void write_string(const char* str)
 }
 
 
-static void write_int(int number, int base)
+static void write_int(long long number, int base)
+{
+    static char digit_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+    // TODO: Make sure base is <= 16, need asserts
+
+    char buf[32];
+    int i = 0;
+    for (i = 0; number; number /= base)
+        buf[i++] = digit_array[number % base];
+
+    while (i--)
+        vga_putchar(buf[i]);
+}
+
+static void write_uint(unsigned long long number, int base)
 {
     static char digit_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
@@ -101,6 +116,8 @@ static void handle_specifier(char spec, va_list* ap)
             write_int(va_arg(*ap, int), 10); } break;
         case 'x': {
             write_int(va_arg(*ap, int), 16); } break;
+        case 'u': {
+            write_uint(va_arg(*ap, unsigned long long), 16); } break;
         case 's': {
             write_string(va_arg(*ap, const char*)); } break;
 
