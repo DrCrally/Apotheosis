@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "text_cursor.h"
+
 enum vga_color 
 {
 	VGA_COLOR_BLACK = 0,
@@ -44,20 +46,28 @@ void vga_setcolor(uint8_t color)
     vga_color = color;
 }
 
-void vga_putentryat(char c, uint8_t color, size_t x, size_t y)
-{
-    const size_t index = y * VGA_WIDTH + x;
-    vga_buffer[index] = vga_entry(c, color);
-}
-
 void vga_putchar(char c)
 {
-    vga_putentryat(c, vga_color, vga_col, vga_row);
-    if (++vga_col == VGA_WIDTH)
+    switch (c)
     {
-        vga_col = 0;
-        if (++vga_row == VGA_HEIGHT)
-            vga_row = 0;
+        case '\n':
+        {
+            ++vga_row;
+            vga_col = 0;
+        } break;
+
+        default:
+        {
+            const size_t index = vga_row * VGA_WIDTH + vga_col;
+            vga_buffer[index] = vga_entry(c, vga_color);
+
+            if (++vga_col == VGA_WIDTH)
+            {
+                vga_col = 0;
+                if (++vga_row == VGA_HEIGHT)
+                    vga_row = 0;
+            }
+        } break;
     }
 }
 
@@ -65,6 +75,8 @@ void vga_writestring(const char* str)
 {
     for (size_t i = 0; str[i]; ++i)
         vga_putchar(str[i]);
+
+    update_cursor(vga_col, vga_row);
 }
 
 void vga_init(void)
@@ -81,4 +93,7 @@ void vga_init(void)
             vga_buffer[index] = vga_entry(' ', vga_color);
         }
     }
+
+    enable_cursor();
+    update_cursor(0, 0);
 }
