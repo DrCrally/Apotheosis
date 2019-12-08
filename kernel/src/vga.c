@@ -72,18 +72,18 @@ void vga_putchar(char c)
     }
 }
 
-void vga_writestring(const char* str)
+void write_string(const char* str)
 {
     for (size_t i = 0; str[i]; ++i)
         vga_putchar(str[i]);
-
-    update_cursor(vga_col, vga_row);
 }
 
 
-void print_int(int number, int base)
+void write_int(int number, int base)
 {
     static char digit_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+    // TODO: Make sure base is <= 16
 
     char buf[32];
     int i = 0;
@@ -98,11 +98,18 @@ void handle_specifier(char spec, va_list* ap)
 {
     switch (spec)
     {
-        case 'b': { print_int(va_arg(*ap, int), 2); } break;
-        case 'o': { print_int(va_arg(*ap, int), 8); } break;
-        case 'd': { print_int(va_arg(*ap, int), 10); } break;
-        case 'x': { print_int(va_arg(*ap, int), 16); } break;
-        case 's': { vga_writestring(va_arg(*ap, const char*)); } break;
+        case 'b': {
+            write_int(va_arg(*ap, int), 2); } break;
+        case 'o': {
+            write_int(va_arg(*ap, int), 8); } break;
+        case 'd': {
+            write_int(va_arg(*ap, int), 10); } break;
+        case 'x': {
+            write_int(va_arg(*ap, int), 16); } break;
+        case 's': {
+            write_string(va_arg(*ap, const char*)); } break;
+
+        default: { /* Do nothing */ } break;
     }
 }
 
