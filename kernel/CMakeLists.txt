@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(kernel C ASM)
 enable_language(ASM)
 
-set(CMAKE_C_COMPILER ${CMAKE_SOURCE_DIR}/cross/bin/i686-elf-gcc)
+set(CMAKE_C_COMPILER $ENV{HOME}/cross/bin/i686-elf-gcc)
 
 set_property(SOURCE src/boot.s PROPERTY LANGUAGE C)
 set_property(SOURCE src/gdt.s PROPERTY LANGUAGE C)
