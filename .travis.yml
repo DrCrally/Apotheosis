@@ -1,0 +1,31 @@
+sudo: require
+dist: xenial
+
+language: c
+
+compiler:
+  - gcc
+
+cache:
+  directories:
+    - /var/cache/apt/archives/*.deb
+    - ~/cross
+
+before_install:
+  - sudo apt update
+  - sudo apt install bison
+  - sudo apt install flex
+  - sudo apt install libgmp3-dev
+  - sudo apt install libmpc-dev
+  - sudo apt install libmpfr-dev
+  - sudo apt install texinfo
+  - sudo apt install libisl-dev
+  - sudo apt install libcloog-isl-dev
+
+script:
+  - chmod +x setup.sh
+  - ./setup.sh
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
