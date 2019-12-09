@@ -41,9 +41,24 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
     return ((uint16_t)uc | ((uint16_t)color << 8u));
 }
 
+static inline size_t index(size_t x, size_t y)
+{
+    return y * VGA_WIDTH + x;
+}
+
 void vga_update_cursor()
 {
     update_cursor(vga_col, vga_row);
+}
+
+static void scroll()
+{
+    for (size_t y = 0; y < VGA_HEIGHT - 1; ++y)
+        for (size_t x = 0; x < VGA_WIDTH; ++x)
+            vga_buffer[index(x, y)] = vga_buffer[index(x, y+ 1)];
+
+    for (size_t i = 0; i < VGA_WIDTH; ++i)
+        vga_buffer[index(i, VGA_HEIGHT - 1)] = vga_entry(' ', vga_color);
 }
 
 void vga_putchar(char c)
@@ -52,8 +67,12 @@ void vga_putchar(char c)
     {
         case '\n':
         {
-            ++vga_row;
             vga_col = 0;
+
+            if (vga_row < VGA_HEIGHT - 1)
+                ++vga_row;
+            else
+                scroll();
         } break;
 
         default:
