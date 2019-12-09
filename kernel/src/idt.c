@@ -2,6 +2,7 @@
 #include <stddef.h>
 
 #include "exception.h"
+#include "irq.h"
 
 #define TASK_GATE 0x05
 #define INTERRUPT_GATE 0x0E
@@ -79,6 +80,11 @@ uintptr_t idt_init()
     // 29 Reserved
     idt_add_entry(30, except_security, TRAP_GATE, KERNEL);
     //31 Reserved
+
+    idt_add_entry(32, keyboard_irq, INTERRUPT_GATE, KERNEL);
+    idt_add_entry(33, keyboard_irq, INTERRUPT_GATE, KERNEL);
+    idt_add_entry(34, keyboard_irq, INTERRUPT_GATE, KERNEL);
+    idt_add_entry(35, keyboard_irq, INTERRUPT_GATE, KERNEL);
 
     description.size = sizeof(IDT);
     description.offset = IDT;

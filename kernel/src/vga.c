@@ -77,8 +77,7 @@ void vga_putchar(char c)
 
         default:
         {
-            const size_t index = vga_row * VGA_WIDTH + vga_col;
-            vga_buffer[index] = vga_entry(c, vga_color);
+            vga_buffer[index(vga_col, vga_row)] = vga_entry(c, vga_color);
 
             if (++vga_col == VGA_WIDTH)
             {
@@ -97,13 +96,8 @@ void vga_init(void)
     vga_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     vga_buffer = (uint16_t*)0xB8000;
     for (size_t y = 0; y < VGA_HEIGHT; ++y)
-    {
         for (size_t x = 0; x < VGA_WIDTH; ++x)
-        {
-            const size_t index = y * VGA_WIDTH + x;
-            vga_buffer[index] = vga_entry(' ', vga_color);
-        }
-    }
+            vga_buffer[index(x, y)] = vga_entry(' ', vga_color);
 
     enable_cursor();
     update_cursor(0, 0);

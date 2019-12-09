@@ -16,5 +16,5 @@ set(CMAKE_C_FLAGS "-std=c99 -ffreestanding -O2 -msoft-float -mno-sse -Wall -Wext
 set(CMAKE_EXE_LINKER_FLAGS "-T ${PROJECT_SOURCE_DIR}/linker.ld -ffreestanding -O2 -nostdlib")
 
 # Set the target and link against libgcc
-add_executable(apotheosis.bin src/kernel.c src/vga.c src/text_cursor.c src/gdt.c src/idt.c src/gdt.s src/idt.s src/exception.c src/kcommon.c src/klog.c src/portio.s src/boot.s)
+add_executable(apotheosis.bin src/kernel.c src/vga.c src/text_cursor.c src/pic.c src/gdt.c src/idt.c src/gdt.s src/idt.s src/exception.c src/kcommon.c src/klog.c src/keyboard.c src/portio.s src/boot.s)
 target_link_libraries(apotheosis.bin gcc)

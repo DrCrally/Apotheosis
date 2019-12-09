@@ -1,10 +1,6 @@
 #include <stdarg.h>
 #include <stddef.h>
 
-#include "klog.h"
-
-// Functions for logging with VGA
-#ifdef LOG_VGA
 #include "vga.h"
 
 #define CREATE(name, type) \
@@ -25,6 +21,11 @@ CREATE(write_long, long)
 CREATE(write_ulong, unsigned long)
 CREATE(write_longlong, unsigned long)
 CREATE(write_ulonglong, unsigned long)
+
+void klog_init()
+{
+    vga_init();
+}
 
 static void write_string_vga(const char* str)
 {
@@ -110,13 +111,4 @@ void kprintf_vga(const char* str, ...)
     va_end(ap);
 
     vga_update_cursor();
-}
-#endif
-
-// Initialize logging facilities
-void klog_init()
-{
-#ifdef LOG_VGA
-    vga_init();
-#endif
 }
