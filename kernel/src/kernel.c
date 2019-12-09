@@ -4,6 +4,7 @@
 #include "idt.h"
 #include "klog.h"
 #include "pic.h"
+#include "kmalloc.h"
 
 void kmain(void) {
     klog_init();
