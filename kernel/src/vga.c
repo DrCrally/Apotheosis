@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include <stddef.h>
-#include <stdarg.h>
 
 #include "text_cursor.h"
 
@@ -42,7 +41,12 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
     return ((uint16_t)uc | ((uint16_t)color << 8u));
 }
 
-static void vga_putchar(char c)
+void vga_update_cursor()
+{
+    update_cursor(vga_col, vga_row);
+}
+
+void vga_putchar(char c)
 {
     switch (c)
     {
@@ -65,95 +69,6 @@ static void vga_putchar(char c)
             }
         } break;
     }
-}
-
-static void write_string(const char* str)
-{
-    for (size_t i = 0; str[i]; ++i)
-        vga_putchar(str[i]);
-}
-
-
-static void write_int(long long number, int base)
-{
-    static char digit_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
-    // TODO: Make sure base is <= 16, need asserts
-
-    char buf[32];
-    int i = 0;
-    for (i = 0; number; number /= base)
-        buf[i++] = digit_array[number % base];
-
-    while (i--)
-        vga_putchar(buf[i]);
-}
-
-static void write_uint(unsigned long long number, int base)
-{
-    static char digit_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
-    // TODO: Make sure base is <= 16, need asserts
-
-    char buf[32];
-    int i = 0;
-    for (i = 0; number; number /= base)
-        buf[i++] = digit_array[number % base];
-
-    while (i--)
-        vga_putchar(buf[i]);
-}
-
-static void handle_specifier(char spec, va_list* ap)
-{
-    switch (spec)
-    {
-        case 'b': {
-            write_int(va_arg(*ap, int), 2); } break;
-        case 'o': {
-            write_int(va_arg(*ap, int), 8); } break;
-        case 'd': {
-            write_int(va_arg(*ap, int), 10); } break;
-        case 'x': {
-            write_int(va_arg(*ap, int), 16); } break;
-        case 'u': {
-            write_uint(va_arg(*ap, unsigned long long), 16); } break;
-        case 's': {
-            write_string(va_arg(*ap, const char*)); } break;
-
-        default: { /* Do nothing */ } break;
-    }
-}
-
-void kprintf(const char* str, ...)
-{
-    va_list ap;
-    va_start(ap, str);
-
-    for (size_t i = 0; str[i]; ++i)
-    {
-        switch (str[i])
-        {
-            case '%':
-            {
-                handle_specifier(str[++i], &ap);
-            } break;
-
-            case '\\':
-            {
-                vga_putchar(str[++i]);
-            } break;
-
-            default:
-            {
-                vga_putchar(str[i]);
-            } break;
-        }
-    }
-
-    va_end(ap);
-
-    update_cursor(vga_col, vga_row);
 }
 
 void vga_init(void)

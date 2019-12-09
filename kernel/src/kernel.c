@@ -1,18 +1,16 @@
 #include <stdint.h>
 
-#include "vga.h"
 #include "gdt.h"
 #include "idt.h"
+#include "klog.h"
 
 void kmain(void)
 {
-    vga_init();
+    klog_init();
 
     uintptr_t gdt_addr = gdt_init();
-    kprintf("Loaded GDT at 0x%x\n", gdt_addr);
+    klog("Loaded GDT at 0x%x\n", gdt_addr);
 
     uintptr_t idt_addr = idt_init();
-    kprintf("Loaded IDT at 0x%x\n", idt_addr);
-
-//    volatile int x = 5 / 0;
+    klog("Loaded IDT at 0x%x\n", idt_addr);
 }

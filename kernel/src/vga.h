@@ -2,6 +2,7 @@
 #define VGA_H
 
 void vga_init(void);
-void kprintf(const char* str, ...);
+void vga_putchar(char c);
+void vga_update_cursor();
 
 #endif

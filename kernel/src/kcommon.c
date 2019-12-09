@@ -1,8 +1,8 @@
-#include "vga.h"
+#include "klog.h"
 
 void panic(void)
 {
-    kprintf("Panic: halting...\n");
+    klog("Panic: halting...\n");
     while (1)
     __asm__ ("cli\n"
              "hlt\n");
