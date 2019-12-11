@@ -1,6 +1,8 @@
+#include <stddef.h>
+
 #include "portio.h"
 
-void enable_cursor()
+void enable_cursor(void)
 {
     const uint8_t cur_beg = 0;
     const uint8_t cur_end = 15;
@@ -12,7 +14,7 @@ void enable_cursor()
     outb(0x3D5, (inb(0x3D5u) & 0xE0u) | cur_end);
 }
 
-void disable_cursor()
+void disable_cursor(void)
 {
     outb(0x3D4, 0x0A);
     outb(0x3D5, 0x20);
@@ -20,7 +22,7 @@ void disable_cursor()
 
 void update_cursor(int x, int y)
 {
-    uint16_t pos = y * 80 + x;
+    size_t pos = y * 80 + x;
 
     outb(0x3D4, 0x0F);
     outb(0x3D5, (uint8_t)(pos & 0xFFu));

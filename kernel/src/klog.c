@@ -19,10 +19,10 @@ CREATE(write_int, int)
 CREATE(write_uint, unsigned int)
 CREATE(write_long, long)
 CREATE(write_ulong, unsigned long)
-CREATE(write_longlong, unsigned long)
-CREATE(write_ulonglong, unsigned long)
+CREATE(write_longlong, long long)
+CREATE(write_ulonglong, unsigned long long)
 
-void klog_init()
+void klog_init(void)
 {
     vga_init();
 }
@@ -53,7 +53,7 @@ static void handle_specifier_vga(const char* str, size_t* i, va_list* ap)
             switch (str[++*i])
             {
                 case 'i':
-                case 'd': { write_long_vga(va_arg(*ap, unsigned long), 10, upper); } break;
+                case 'd': { write_long_vga(va_arg(*ap, long), 10, upper); } break;
                 case 'b': { write_ulong_vga(va_arg(*ap, unsigned long), 2, upper); } break;
                 case 'o': { write_ulong_vga(va_arg(*ap, unsigned long), 8, upper); } break;
                 case 'u': { write_ulong_vga(va_arg(*ap, unsigned long), 10, upper); } break;
@@ -64,12 +64,12 @@ static void handle_specifier_vga(const char* str, size_t* i, va_list* ap)
                     switch (str[++*i])
                     {
                         case 'i':
-                        case 'd': { write_longlong_vga(va_arg(*ap, unsigned long), 10, upper); } break;
-                        case 'b': { write_ulonglong_vga(va_arg(*ap, unsigned long), 2, upper); } break;
-                        case 'o': { write_ulonglong_vga(va_arg(*ap, unsigned long), 8, upper); } break;
-                        case 'u': { write_ulonglong_vga(va_arg(*ap, unsigned long), 10, upper); } break;
-                        case 'X': { write_ulonglong_vga(va_arg(*ap, unsigned long), 16, upper); } break;
-                        case 'x': { write_ulonglong_vga(va_arg(*ap, unsigned long), 16, lower); } break;
+                        case 'd': { write_longlong_vga(va_arg(*ap, long long), 10, upper); } break;
+                        case 'b': { write_ulonglong_vga(va_arg(*ap, unsigned long long), 2, upper); } break;
+                        case 'o': { write_ulonglong_vga(va_arg(*ap, unsigned long long), 8, upper); } break;
+                        case 'u': { write_ulonglong_vga(va_arg(*ap, unsigned long long), 10, upper); } break;
+                        case 'X': { write_ulonglong_vga(va_arg(*ap, unsigned long long), 16, upper); } break;
+                        case 'x': { write_ulonglong_vga(va_arg(*ap, unsigned long long), 16, lower); } break;
                     }
                 } break;
             }

@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-uintptr_t gdt_init();
+uintptr_t gdt_init(void);
 
 #endif

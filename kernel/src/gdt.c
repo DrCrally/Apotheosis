@@ -11,7 +11,7 @@ void load_gdt(struct GDTDescription desc);
 static struct GDTDescription description;
 static uint64_t GDT[256] = {0};
 
-uintptr_t gdt_init()
+uintptr_t gdt_init(void)
 {
     GDT[0] = 0;                  // Null segment
     GDT[1] = 0x00CF9A000000FFFF; // Kernel code

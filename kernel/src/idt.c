@@ -45,7 +45,7 @@ void idt_add_entry(size_t index, void* offset, uint8_t gate_type, uint8_t priv_l
     IDT[index].present = 1;
 }
 
-uintptr_t idt_init()
+uintptr_t idt_init(void)
 {
     // Register CPU exceptions in IDT
     idt_add_entry(0, except_div_by_zero, TRAP_GATE, KERNEL);

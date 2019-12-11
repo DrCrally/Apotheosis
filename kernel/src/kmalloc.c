@@ -105,3 +105,10 @@ void* kmalloc(size_t size)
     // Unreachable, silence warning
     return NULL;
 }
+
+void* kcalloc(size_t size)
+{
+    void* ptr = kmalloc(size);
+    memset(ptr, 0, size);
+    return ptr;
+}

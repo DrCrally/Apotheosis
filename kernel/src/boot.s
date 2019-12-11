@@ -23,7 +23,9 @@ stack_top:
 .type _start, @function
 _start:
 	lea esp, stack_top
- 
+
+    push eax
+    push ebx
 	call kmain
 
 	cli
